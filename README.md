@@ -12,7 +12,7 @@ Because the `zsl` autodiff engine is tape-based, memory consumption scales with 
 
 ## Quick Start
 
-Everything you need is included out of the box. The MNIST dataset images and labels are bundled in the local `data/` directory, and the Zig package manager will automatically fetch `zsl` during the build process.
+Everything needed is included within the repository. The MNIST dataset images and labels are bundled in the local `data/` directory, and the Zig package manager will automatically fetch `zsl` during the build process.
 
 ### Prerequisites
 

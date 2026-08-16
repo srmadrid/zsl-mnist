@@ -1,0 +1,20 @@
+.{
+    .name = .zsl_mnist,
+    .version = "0.0.0",
+    .fingerprint = 0xbeb20b564de2d885,
+    .minimum_zig_version = "0.16.0",
+    .dependencies = .{
+        .zsl = .{
+            .url = "git+https://github.com/srmadrid/zsl#fac712fd0199002d9deb2e1516e89b29b9fc2d3c",
+            .hash = "zsl-0.0.0-Z5ET-yNMPQE1bmN8zMKkxn_svKhJqPAJH_a9iUizwYWh",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+        "data",
+        "LICENSE",
+        "README.md",
+    },
+}
