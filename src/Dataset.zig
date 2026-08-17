@@ -8,8 +8,8 @@ const Dataset = @This();
 
 images: []Image,
 
-pub fn init(arena: std.mem.Allocator, gpa: std.mem.Allocator, io: std.Io, dirercoty: []const u8) !Dataset {
-    const labels_path = try std.fs.path.join(gpa, &.{ dirercoty, "labels.txt" });
+pub fn init(arena: std.mem.Allocator, gpa: std.mem.Allocator, io: std.Io, directory: []const u8) !Dataset {
+    const labels_path = try std.fs.path.join(gpa, &.{ directory, "labels.txt" });
     defer gpa.free(labels_path);
     const labels_contents = try std.Io.Dir.cwd().readFileAlloc(io, labels_path, gpa, .unlimited);
     defer gpa.free(labels_contents);
@@ -35,7 +35,7 @@ pub fn init(arena: std.mem.Allocator, gpa: std.mem.Allocator, io: std.Io, direrc
     defer gpa.free(loaded);
     @memset(loaded, false);
 
-    const dir = try std.Io.Dir.cwd().openDir(io, dirercoty, .{ .iterate = true });
+    const dir = try std.Io.Dir.cwd().openDir(io, directory, .{ .iterate = true });
     defer dir.close(io);
 
     var dir_iterator = dir.iterate();
@@ -71,8 +71,4 @@ pub fn deinit(self: *Dataset, arena: std.mem.Allocator, gpa: std.mem.Allocator) 
     gpa.free(self.images);
 
     self.* = undefined;
-}
-
-pub fn getAssumeInBounds(self: Dataset, idx: usize) Image {
-    return self.images[idx];
 }

@@ -7,8 +7,6 @@ const Image = @This();
 data: zsl.array.Dense(f32),
 label: usize,
 
-/// Initializes an `Image` from a given file. Assumes the filename is the index
-/// of the label in a `labels.txt` file within the same directory.
 pub fn init(arena: std.mem.Allocator, file_contents: []const u8, label: usize) !Image {
     if (file_contents.len < 2 or !std.mem.startsWith(u8, file_contents, "P5"))
         return error.InavilPgmMagicNumber;
@@ -46,17 +44,15 @@ pub fn init(arena: std.mem.Allocator, file_contents: []const u8, label: usize) !
     skipWhitespaceAndComments(file_contents, &pos);
     const height = try readInt(file_contents, &pos);
     skipWhitespaceAndComments(file_contents, &pos);
-    const maxval = try readInt(file_contents, &pos);
+    const max_val = try readInt(file_contents, &pos);
 
     if (pos >= file_contents.len or !std.ascii.isWhitespace(file_contents[pos]))
         return error.InvalidPgmHeader;
 
     pos += 1;
 
-    if (maxval > 255)
+    if (max_val > 255)
         return error.UnsupportedPgmMaxval;
-
-    const maxval_f = zsl.numeric.cast(f32, maxval);
 
     const pixel_count = width * height;
     if (file_contents.len < pos + pixel_count)
@@ -66,6 +62,8 @@ pub fn init(arena: std.mem.Allocator, file_contents: []const u8, label: usize) !
         .data = try .init(arena, &.{ height, width }, .c),
         .label = label,
     };
+
+    const maxval_f = zsl.numeric.cast(f32, max_val);
 
     for (0..height) |i| {
         for (0..width) |j| {
