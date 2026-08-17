@@ -4,7 +4,7 @@ const zsl = @import("zsl");
 
 const Image = @This();
 
-data: zsl.matrix.general.Dense(f32, .row_major),
+data: zsl.array.Dense(f32),
 label: usize,
 
 /// Initializes an `Image` from a given file. Assumes the filename is the index
@@ -63,7 +63,7 @@ pub fn init(arena: std.mem.Allocator, file_contents: []const u8, label: usize) !
         return error.TruncatedPgmData;
 
     var image: Image = .{
-        .data = try .init(arena, height, width),
+        .data = try .init(arena, &.{ height, width }, .c),
         .label = label,
     };
 
@@ -71,7 +71,7 @@ pub fn init(arena: std.mem.Allocator, file_contents: []const u8, label: usize) !
         for (0..width) |j| {
             const byte = file_contents[pos + i * width + j];
             const val = zsl.numeric.cast(f32, byte) / maxval_f;
-            image.data.setAssumeInBounds(i, j, val);
+            image.data.setAssumeInBounds(&.{ i, j }, val);
         }
     }
 
